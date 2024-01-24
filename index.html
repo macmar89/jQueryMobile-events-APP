@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sk">
+    <head>
+        <title>Events App</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+        <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="js/helpers.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+    <body>
+        <!-- HOME PAGE -->
+        <div data-role="page" id="home">
+            <header data-role="header" data-theme="b">
+                <h1 id="mainHeader">Events App</h1>
+            </header>
+
+            <main data-role="main" >
+                <ul id="games" data-role="listview" data-inset="true"></ul>
+            </main>
+
+            <footer data-role="footer" data-position="fixed" data-theme="b">
+                <h4>&copy;2024</h4>
+            </footer>
+        </div>
+
+        <!-- POPUP GAME DETAIL PAGE -->
+        <div data-role="popup"  id="gameDetailPopup" >
+            <div data-role="header">
+                <h4>Detail zápasu</h4>
+            </div>
+            <div data-role="main" class="ui-content" id="popupBody">
+            </div>
+        </div>
+    </body>
+</html>
