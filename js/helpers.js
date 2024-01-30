@@ -2,11 +2,15 @@ function sortGameByStartDate(games) {
   return games.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 }
 
-//  ***
-//  --- SAVE GAMES TO SESSION STORAGE ---
-//  ***
+function fetchGamesFromSessionStorage() {
+  return JSON.parse(sessionStorage.getItem("games")) || [];
+}
 
-function fetchGamesToStorage() {
+function saveEventsToSessionStorage(data) {
+  sessionStorage.setItem("games", JSON.stringify(data));
+}
+
+function fetchAndSortEventsFromJson() {
   const jsonFile = "events.json";
 
   $.getJSON(jsonFile, function (data) {
@@ -16,24 +20,31 @@ function fetchGamesToStorage() {
       return { ...game, pastGameViewed: false };
     });
 
-    sessionStorage.setItem("games", JSON.stringify(games));
+    saveEventsToSessionStorage(games);
   });
 }
 
-//  ***
-//  --- FETCH SAVED GAMES IN SESSION STORAGE ---
-//  ***
-
-function fetchGamesFromSession() {
-  return JSON.parse(sessionStorage.getItem("games")) || [];
+function formatDate(dateTime) {
+  return new Date(dateTime).toLocaleDateString();
 }
 
-//  ***
-//  --- GET GAMES FROM JSON FILE ---
-//  ***
+function formatTime(dateTime) {
+  return new Date(dateTime).toLocaleTimeString();
+}
 
-function displayGames() {
-  const data = fetchGamesFromSession();
+function setGameAsPastGameViewed(id) {
+  const games = fetchGamesFromSessionStorage();
+  const updatedGames = games.reduce((acc, game) => {
+    if (game.id === id) {
+      return [...acc, { ...game, pastGameViewed: true }];
+    }
+    return [...acc, game];
+  }, []);
+  saveEventsToSessionStorage(updatedGames);
+}
+
+function showEvents() {
+  const data = fetchGamesFromSessionStorage();
   const games = $("#games");
 
   const groupByDate = data?.reduce(function (gameDate, obj) {
@@ -97,43 +108,8 @@ function displayGames() {
   });
 }
 
-//  ***
-//  --- FORMAT DATE ---
-//  ***
-
-function formatDate(dateTime) {
-  return new Date(dateTime).toLocaleDateString();
-}
-
-//  ***
-//  --- FORMAT DATE ---
-//  ***
-
-function formatTime(dateTime) {
-  return new Date(dateTime).toLocaleTimeString();
-}
-
-//  ***
-//  --- SET GAME AS pastGameViewed ---
-//  ***
-
-function setGameAsPastGameViewed(id) {
-  const games = fetchGamesFromSession();
-  const updatedGames = games.reduce((acc, game) => {
-    if (game.id === id) {
-      return [...acc, { ...game, pastGameViewed: true }];
-    }
-    return [...acc, game];
-  }, []);
-  sessionStorage.setItem("games", JSON.stringify(updatedGames));
-}
-
-//  ***
-//  --- FILLING DATA FOR POPUP WINDOW ---
-//  ***
-
 function showGameDetail(id) {
-  const games = fetchGamesFromSession();
+  const games = fetchGamesFromSessionStorage();
   const currentGame = games.find((game) => game.id === id);
   const { startDate, name, possibleWinner } = currentGame;
 
@@ -171,5 +147,5 @@ function showGameDetail(id) {
 
   const gamesDiv = $("#games");
   gamesDiv.empty();
-  displayGames();
+  showEvents();
 }

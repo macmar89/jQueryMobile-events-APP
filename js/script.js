@@ -1,5 +1,5 @@
-$(document).one('pageinit', function() {
-    fetchGamesToStorage();
+$(document).one("pageinit", function () {
+  fetchAndSortEventsFromJson();
 
-    displayGames();
-})
+  showEvents();
+});
