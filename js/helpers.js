@@ -135,7 +135,7 @@ function setGameAsPastGameViewed(id) {
 function showGameDetail(id) {
   const games = fetchGamesFromSession();
   const currentGame = games.find((game) => game.id === id);
-  const { startDate, name, possibleWinner, pastGameViewed } = currentGame;
+  const { startDate, name, possibleWinner } = currentGame;
 
   const isGamePlayed = new Date(startDate) < new Date();
 
@@ -157,9 +157,15 @@ function showGameDetail(id) {
     );
 
   if (isGamePlayed) {
+    const indexCurrentGame = games.findIndex((game) => game.id === id);
+
+    const nextUnviewedGame = games
+      .slice(indexCurrentGame + 1)
+      .find((match) => !match.pastGameViewed);
+
     popup.append(`<hr />`);
     popup.append(
-      `<div class="ui-content popup-next-game"><p>Zápas sa už odohral.</p><p>Pozrite nasledujúci zápas: bla vs. bla</p></div>`
+      `<div class="ui-content popup-next-game"><p>Zápas sa už odohral.</p><p>Pozrite nasledujúci zápas: <strong>${nextUnviewedGame.name}</strong></p></div>`
     );
   }
 
